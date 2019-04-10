@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>	
+	<meta charset="utf-8" />
+	<title>Canvas</title>
+	<style type="text/css">
+		canvas {
+			border: 1px solid black;
+			float: right;
+		}
+		.options{
+			float: left;
+			width: 50%;
+			height: 400px;
+			text-align: center;
+		}
+		input {
+			margin: 5% 0;
+			width: 80px;
+		}
+
+		input[type="radio"] {
+			margin-right: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="options">
+		<h3>What do you want to draw?</h3>
+		<label for="line">Line</label>
+		<input onchange="changeFigure();" id="line" type="radio" name="figure" />
+		<label for="circle">Circle</label>
+		<input onchange="changeFigure();" id="circle" type="radio" name="figure" />
+		<label for="rectangle">Rectange</label>
+		<input onchange="changeFigure();" id="rectangle" type="radio" name="figure" />
+		<label for="text">Text</label>
+		<input onchange="changeFigure();" id="text" type="radio" name="figure" />
+
+		<h3>Take some value:</h3>
+		<label for="x">X:</label>
+		<input id="x" class="text-field" type="text" name="x" />
+		<label for="y">Y:</label>
+		<input id="y" class="text-field" type="text" name="y" />
+		<label for="x2">X2:</label>
+		<input id="x2" class="text-field" type="text" name="x2" /> <br />
+		<label for="y2">Y2:</label>
+		<input id="y2" class="text-field" type="text" name="y2" />
+		<label for="r">R:</label>
+		<input id="r" class="text-field" type="text" name="r" />
+		<label for="w">W:</label>
+		<input id="w" class="text-field" type="text" name="w" /> <br />
+		<label for="h">H:</label>
+		<input id="h" class="text-field" type="text" name="h" />
+		<label for="text2">Text:</label>
+		<input id="text2" class="text-field" type="text" name="text2" />
+		<br />
+		<button type="button" onclick="draw();">Draw</button>
+		<button type="button" onclick="clRect();">Clear</button>
+		<button type="button" onclick="drawGradient();">Gradient</button>
+	</div>
+	<canvas id="canvas" width="500" height="400"></canvas>
+	<script type="text/javascript">
+
+		var i,
+			line = document.getElementById( 'line' ),
+			circle = document.getElementById( 'circle' ),
+			rectangle = document.getElementById( 'rectangle' ),
+			text = document.getElementById( 'text' ),
+			textFields = document.getElementsByClassName( 'text-field' ),
+			x = document.getElementById( 'x' ),
+			y = document.getElementById( 'y' ),
+			x2 = document.getElementById( 'x2' ),
+			y2 = document.getElementById( 'y2' ),
+			r = document.getElementById( 'r' ),
+			w = document.getElementById( 'w' ),
+			h = document.getElementById( 'h' ),
+			text2 = document.getElementById( 'text2' ),
+			canvas = document.getElementById( 'canvas' ),
+			ctx = canvas.getContext( '2d' );
+
+			function disableElements() {
+				for ( i = 0; i < textFields.length; i+=1 ){
+					textFields[i].disabled = true;
+				}
+			};
+			
+			disableElements();
+
+			function changeFigure() { 
+				if( line.checked ) {
+					disableElements();
+					x.disabled = false;
+					y.disabled = false;
+					x2.disabled = false;
+					y2.disabled = false;
+				} else if ( circle.checked ) {
+					disableElements();
+					x.disabled = false;
+					y.disabled = false;
+					r.disabled = false;
+				} else if ( rectangle.checked ){
+					disableElements();
+					x.disabled = false;
+					y.disabled = false;
+					w.disabled = false;
+					h.disabled = false;
+				} else if ( text.checked ){
+					disableElements();
+					x.disabled = false;
+					y.disabled = false;
+					text2.disabled = false;
+				}
+			}
+
+			function draw() {
+				if( line.checked ) {
+					ctx.moveTo( x.value, y.value );
+					ctx.lineTo( x2.value, y2.value );
+					ctx.stroke();
+				}
+				else if( circle.checked ) {
+					ctx.beginPath();
+					ctx.arc( x.value, y.value, r.value, 0, 2*Math.PI );
+					ctx.stroke();
+				}
+				else if (text.checked) {
+					ctx.font="30px Arial";
+					ctx.strokeText(text2.value,x.value,y.value);
+				}
+				else if (rectangle.checked) {
+					ctx.rect(x.value,y.value,w.value,h.value);
+					ctx.stroke();
+				}
+			}
+
+			function drawGradient(){
+				clRect();
+				var grd=ctx.createLinearGradient(0,0,200,0);
+				grd.addColorStop(0,"red");
+				grd.addColorStop(1,"white");
+				ctx.fillStyle=grd;
+				ctx.fillRect(10,10,150,80);
+
+
+			}
+
+			function clRect() {
+				ctx.clearRect( 0, 0, canvas.width, canvas.height );
+			}
+	</script>
+</body>
+</html>
