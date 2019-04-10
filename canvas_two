@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+	<head>
+		<style>
+			body{ background-color: black;}
+		</style>
+	</head>
+	<body>
+		<input type="button" onclick="clearCanvas();" value="Clear" />
+		<input type="button" onclick="showRandomRects();" value="Rectangles" />
+		<input type="button" onclick="showRandomDrops();" value="Drops" />
+		<br />
+		<canvas id="myCanvas" width="600" height="400" style="border:1px solid red;">
+			Your browser does not support the canvas element.
+		</canvas>
+		<script>
+			var canvas = document.getElementById("myCanvas");  // Стъпка 1
+			var ctx = canvas.getContext("2d");                 // Стъпка 2
+				
+				
+			function clearCanvas(){
+				ctx.clearRect(0,0, canvas.getAttribute('width'), canvas.getAttribute('height'));
+			}
+			
+			function getRandomInt(min, max){
+				return Math.floor(Math.random()*(max - min + 1)) + min;
+			}
+			
+			function getRandomColor(){
+				var rVal = getRandomInt(0, 255);
+				var gVal = getRandomInt(0, 255);
+				var bVal = getRandomInt(0, 255);
+				
+				return 'rgb(' + rVal + ', ' + gVal + ', ' + bVal + ')';
+			}
+			
+			function showRandomRects(){
+				var cellSize = 35;
+				var lineWidth = 5;
+				var maxRows = 8;
+				var maxCols = 8;
+				
+				for(var i = 1; i <= maxCols; i++){
+					for(var j = 1; j <= maxRows; j++){
+					
+						// Цвят на запълване
+						if((i + j) % 2 == 0){
+							ctx.fillStyle = "#FF0000";  
+							ctx.strokeStyle = "#FFFFFF";						
+						}else{
+							ctx.fillStyle = "#0000FF";
+							ctx.strokeStyle = "#00FF00";
+						}
+						
+						ctx.fillStyle = getRandomColor();
+						ctx.strokeStyle = getRandomColor();
+						
+						// Чертаем фигура
+						ctx.lineWidth = lineWidth;
+						ctx.fillRect(i*(cellSize + lineWidth),j*(cellSize + lineWidth),cellSize,cellSize); 
+						ctx.strokeRect(i*(cellSize + lineWidth),j*(cellSize + lineWidth),cellSize,cellSize);
+					}                                            
+				}
+			}
+			
+			function showRandomDrops(){
+				for(var i = 1; i < 100; i++){
+					var x2, y2, r2, x1, y1, r1;
+					
+					x1 = getRandomInt(0, canvas.getAttribute('width'));
+					x2 = getRandomInt(0, canvas.getAttribute('width'));
+					
+					y1 = getRandomInt(0, canvas.getAttribute('height'));
+					y2 = getRandomInt(0, canvas.getAttribute('width'));
+					
+					r1 = 50;
+					r2 = 150;
+					
+					var randDrop = ctx.createRadialGradient(x1, y1, 1, x1, y1, r1);
+					randDrop.addColorStop(0,getRandomColor());
+					randDrop.addColorStop(1,getRandomColor());
+					
+					ctx.fillStyle = randDrop;
+					
+					ctx.beginPath();
+					ctx.arc(x1, y1, r1, 0, 360);
+					ctx.fill();
+					//ctx.stroke();
+				}
+			}
+		</script>
+	</body>
+</html>
