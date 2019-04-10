@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>SVG</title>
+		<style type="text/css">
+			svg {
+				border: 2px solid pink;
+			}
+		</style>
+	</head>
+	<body>
+		<svg width="400" height="400">
+			This browser does not support svg 
+			<!-- <text x="50" y="50" fill="red" transform="rotate(-30 20, 40)">chart</text>
+			<line x1="10" y1="390" x2="390" y2="390" style="stroke: pink; stroke-width: 2"></line>
+			<rect x="10" y="339" width="20" height="50" style="fill: blue"></rect> -->
+		</svg><br />
+		<button type="button" onclick="drawChart();">Draw Chart</button>
+		<button id="add-val" type="button" onclick="addNewValue();">Add new value</button>
+		<button type="button" onclick="drawPolyline();">Change Style</button>
+		<button type="button" onclick="drawElipse();">Ellipse</button>
+
+		<script>
+			var arr = [ 50, 100, 80, 60 ];
+			var svg = document.getElementsByTagName( 'svg' )[ 0 ];
+			var color;
+
+			function drawElipse() {
+				svg.innerHTML = '';
+				for( var i = 0; i < arr.length; i += 1 ) {
+					svg.innerHTML += '<ellipse cx="' + 200 + '" cy="' + ( 300 - 10 * i ) + '" rx="' + arr[ i ]*2 + '" ry="' + arr[ i ] + '" style="fill: none; stroke: violet; stroke-width: 2" />';
+				}
+			}
+
+			function drawPolyline() {
+				var points = '';
+				for( var i = 0; i < arr.length; i++ ) {
+					points += '' + Number ( 10 + 30 * i ) + ',' + Number ( 389 - arr[ i ]) + ' '
+				}
+				svg.innerHTML = '<polyline points="' + points + '" style="fill: none; stroke: pink; stroke-width: 2" />'; 
+			}
+
+			function drawChart() {
+				svg.innerHTML = '<text x="50" y="50" fill="red" transform="rotate(-30 20, 40)">chart</text>' +
+				'<line x1="10" y1="390" x2="390" y2="390" style="stroke: pink; stroke-width: 2" />';
+
+				for( var i = 0; i < arr.length; i += 1 ) {
+					if( arr[ i ] <= 50 ) {
+						color = '#0000FF';
+					} else if( arr[ i ] <= 100 ) {
+						color= '#00FF00';
+					} else {
+						color = '#FF0000';
+					}
+					svg.innerHTML += '<rect x="' + Number ( 10 + 30 * i ) + '" y="' + Number ( 389 - arr[ i ]) + '" width="20" height="' + Number( arr[ i ] ) + '" style="fill: ' + color + '" />';
+				}
+			}
+
+			function addNewValue() {
+				var newVal = Number( prompt( 'enter value between 0 and 350', 98 ) );
+				console.log( newVal );
+				if( Number( newVal ) < 350 && newVal > 0 && !isNaN( newVal ) ) {
+					arr.push( Number( newVal ) );
+					drawChart();
+				} else {
+					alert( 'Ba\'t Valiu' );
+				}
+				if( arr.length >= 13 ) {
+					document.getElementById( 'add-val' ).disabled=true;
+				}
+			}
+		</script>
+	</body>
+</html>
